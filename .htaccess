@@ -6,8 +6,10 @@ ErrorDocument 404 /pastes/404.txt
 RewriteEngine On
 RewriteBase /
 
+RewriteCond %{REQUEST_FILENAME} !-f
+
 RewriteRule \.git/ - [F]
 RewriteRule ^([A-Za-z0-9-]+)\.meta$ - [F]
 RewriteRule ^pastes(/)$ /pastes/404.txt [L]
-RewriteRule ^([A-Za-z0-9-]+)\.(txt|sh|php|py)$ pastes/$1.txt [L]
+RewriteRule ^([A-Za-z0-9-]+)\.([A-Za-z]+)$ pastes/$1.txt [L]
 
