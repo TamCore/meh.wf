@@ -15,6 +15,6 @@
     file_put_contents('pastes/'.$cryptid.'.txt', $code);
     file_put_contents('pastes/'.$cryptid.'.meta', 'Creator: ' . $_SERVER['REMOTE_ADDR'] . "\n");
     $url = "http://".$_SERVER['HTTP_HOST']."/".$cryptid.".txt";
-    echo $url;
+    echo $url . PHP_EOL;
     header("Location: ".$url, true, 301);
 ?>
