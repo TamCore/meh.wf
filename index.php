@@ -1,81 +1,105 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title><?php echo $_SERVER['HTTP_HOST']; ?></title>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" /> <style type="text/css">
-html {
-    background-color: #e6e6e6;
-}
-body {
-    font-family: Verdana, Arial, sans-serif;
-    background-color: #f6f6f6;
-    border: 2px solid #e0e0e0;
-    margin: 10px;
-    padding: 5px;
-}
-textarea {
-    border: 1px solid #b0b0b0;
-    padding: 5px;
-    font-size: 90%;
-    margin: 20px;
-    overflow: hidden;
-    outline: none;
-    resize: none;
-    color: #333;
-}
-input#submit {
-    border: 1px solid #b0b0b0;
-    font-size: 95%;
-    color: #333;
-    position: fixed;
-    top: 1.1em;
-    right: 2em;
-}
-h2 {
-    margin: 0px 5px 0px 5px;
-    border-bottom: 1px solid #b0b0b0;
-    color: #b0b0b0;
-    font-weight: normal;
-    font-size: 150%;
-}
-</style>
-<script type="text/javascript">
-var observe;
-if (window.attachEvent) {
-    observe = function (element, event, handler) {
-        element.attachEvent('on'+event, handler);
-    };
-} else {
-    observe = function (element, event, handler) {
-        element.addEventListener(event, handler, false);
-    };
-}
-function init () {
-    var code = document.getElementById('code');
-    function resize () {
-        code.style.height = 'auto';
-        code.style.height = code.scrollHeight+'px';
-    }
-    function delayedResize () {
-        window.setTimeout(resize, 0);
-    }
-    observe(code, 'change',  resize);
-    observe(code, 'cut',     delayedResize);
-    observe(code, 'paste',   delayedResize);
-    observe(code, 'drop',    delayedResize);
-    observe(code, 'keydown', delayedResize);
+<?php
+  $host = $_SERVER['HTTP_HOST'];
+  $http = (empty($_SERVER['HTTPS']) === false  ? 'https' : 'http');
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>paste bin - <?php echo $host; ?></title>
+        <style type="text/css">
+            body {
+                width: 600px;
+                font-family: monospace;
+                //font-size: 12px;
+                display: block;
+            }
 
-    code.focus();
-    code.select();
-    resize();
-}
+            form {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                margin-left: 2em;
+            }
+
+            .submit {
+                border: 0;
+                cursor: pointer;
+            }
+
+            .title-container {
+                text-align: center;
+            }
+
+            .title-left, .title-center, .title-right {
+                display: inline-block;
+                width: 30%;
+            }
+
+            .title-left {
+                text-align: left;
+            }
+
+            .title-right {
+                text-align: right;
+            }
+
+            .subtitle {
+                font-weight: bold;
+                text-transform: uppercase;
+                margin-top: 15px;
+                margin-bottom: 10px;
+            }
+
+            .content {
+                white-space: pre;
+                margin-left: 20px;
+            }
+
+            .code {
+                width: 95%;
+                height: 220px;
+                overflow: auto;
+            }
+        </style>
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="//cdn.rawgit.com/jackmoore/autosize/master/jquery.autosize.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.code').autosize();
+});
 </script>
-</head>
-<body onload="init();">
-    <h2><?php echo $_SERVER['HTTP_HOST']; ?></h2>
-    <form action="post.php" method="post">
-        <textarea rows="30" cols="170" id="code" name="code"></textarea>
-        <input type="submit" name="submit" id="submit" value="Submit" />
-    </form>
-</body>
+
+    </head>
+    <body>
+        <div class="title-container">
+            <div class="title-left">paste(1)</div>
+            <div class="title-center"><?php echo $host; ?></div>
+            <div class="title-right">paste(1)</div>
+        </div>
+
+        <div class="subtitle">NAME</div>
+        <div class="content"><?php echo $host; ?>: simple pastebin</div>
+
+        <div class="subtitle">EXAMPLES</div>
+        <div class="content">To paste the output of a executed command:
+
+    &lt;command&gt; | curl --data-binary @- <?php echo $http.'://'.$host; ?>/post.php
+
+To post the contents of a file:
+
+    cat &lt;filename&gt; | curl --data-binary @- <?php echo $http.'://'.$host; ?>/post.php</div>
+
+        <div class="subtitle">HELPERS</div>
+        <div class="content">Tiny alias for your ~/.bashrc
+
+    alias meh="curl --data-binary @- <?php echo $http.'://'.$host; ?>/post.php"</div>
+
+        <div class="subtitle">INPUT</div>
+        <form action="post.php" method="post">
+            <textarea class="code" name="code"></textarea>
+            <br />
+            <input type="submit" name="submit" class="submit" value="Submit" />
+        </form>
+    </body>
 </html>
