@@ -1,4 +1,7 @@
 <?php
+    $host = $_SERVER['HTTP_HOST'];
+    $http = (empty($_SERVER['HTTPS']) === false  ? 'https' : 'http');
+
     if (isset($_POST['code'], $_POST['submit'])) {
       $code = $_POST['code'];
     } elseif (isset($_SERVER['CONTENT_LENGTH'])) {
@@ -19,7 +22,7 @@
     }
     file_put_contents('pastes/'.$cryptid.'.txt', $code);
     file_put_contents('pastes/'.$cryptid.'.meta', 'Creator: ' . $_SERVER['REMOTE_ADDR'] . "\n");
-    $url = "http://".$_SERVER['HTTP_HOST']."/".$cryptid.".txt";
+    $url = $http."://".$host."/".$cryptid.".txt";
     echo $url . PHP_EOL;
     header("Location: ".$url, true, 301);
 ?>
