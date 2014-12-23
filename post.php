@@ -7,6 +7,11 @@
         require("index.php");
         exit;
     }
+    $finfo = new finfo(FILEINFO_MIME);
+    if (preg_match("/^text\/.*/", $finfo->buffer($code)) == false) {
+        echo 'submitted content is not text.' . PHP_EOL;
+        exit;
+    }
     $cryptid = '';
     while ($cryptid == '') {
         $cryptid = dechex(time() . rand(0, 99));
