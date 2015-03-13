@@ -11,8 +11,8 @@
         exit;
     }
     $finfo = new finfo(FILEINFO_MIME);
-    if (preg_match("/^text\/.*/", $finfo->buffer($code)) == false) {
-        echo 'submitted content is not text.' . PHP_EOL;
+    if (preg_match("/^(text|message)\/.*/", $finfo->buffer($code)) == false) {
+        echo 'submitted content is not text. ('. $finfo->buffer($code) .')' . PHP_EOL;
         exit;
     }
     $cryptid = '';
